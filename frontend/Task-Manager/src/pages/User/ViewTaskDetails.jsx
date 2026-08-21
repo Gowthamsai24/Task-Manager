@@ -106,7 +106,7 @@ const ViewTaskDetails = () => {
                 <div className="col-span-6 md:col-span-4">
                   <label className="text-xs font-medium text-slate-500">Assigned To</label>
                   <AvatarGroup
-                    avatars={task?.assignedTo?.map((item) => item?.profileImageUrl) || []}
+                    users={task?.assignedTo || []}
                     maxVisible={5}
                   />
                 </div>

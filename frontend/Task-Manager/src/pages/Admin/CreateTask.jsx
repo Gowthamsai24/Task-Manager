@@ -64,6 +64,7 @@ const CreateTask = () => {
       });
        toast.success("Task Created Successfully");
        clearData();
+       navigate('/admin/tasks');
     }catch(error){
       console.error("Error creating task:",error);
 
@@ -99,6 +100,7 @@ const CreateTask = () => {
       }
      );
      toast.success("Task Updated Successfully");
+     navigate('/admin/tasks');
     }catch(error){
        console.error("Error updating task:", error);
 
@@ -189,8 +191,9 @@ const CreateTask = () => {
   useEffect(()=>{
     if(taskId){
       getTaskDetailsByID(taskId);
+    } else {
+      clearData();
     }
-    return()=>{};
   },[taskId]);
   return (
     <DashboardLayout activeMenu="Create Task">

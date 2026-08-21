@@ -1,15 +1,22 @@
 import React from "react";
+import { getInitials, getAvatarBgColor } from "../../utils/helper";
 
 const UserCard = ({ userInfo }) => {
   return (
     <div className="user-card p-2">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <img
-            src={userInfo?.profileImageUrl}
-            alt={`Avatar`}
-            className="w-12 h-12 rounded-full border-2 border-white"
-          />
+          {userInfo?.profileImageUrl ? (
+            <img
+              src={userInfo.profileImageUrl}
+              alt={userInfo.name}
+              className="w-12 h-12 rounded-full border-2 border-white object-cover"
+            />
+          ) : (
+            <div className={`w-12 h-12 rounded-full border-2 border-white flex items-center justify-center text-sm font-semibold ${getAvatarBgColor(userInfo?.name)}`}>
+              {getInitials(userInfo?.name)}
+            </div>
+          )}
           <div>
             <p className="text-sm font-medium">{userInfo?.name}</p>
             <p className="text-xs text-gray-500">{userInfo?.email}</p>

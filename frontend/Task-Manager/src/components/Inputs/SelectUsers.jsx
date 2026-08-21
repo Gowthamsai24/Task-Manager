@@ -4,6 +4,7 @@ import { API_PATHS } from "../../utils/apiPaths";
 import AvatarGroup from "../AvatarGroup";
 import Modal from "../Modal";
 import { LuUsers } from "react-icons/lu";
+import { getInitials, getAvatarBgColor } from "../../utils/helper";
 
 const SelectUsers = ({ selectedUsers, setSelectedUsers }) => {
   const [allUsers, setAllUsers] = useState([]);
@@ -33,31 +34,31 @@ const SelectUsers = ({ selectedUsers, setSelectedUsers }) => {
     setSelectedUsers(tempSelectedUsers);
     setIsModalOpen(false);
 };
-const selectedUserAvatars = allUsers
-  .filter((user) => selectedUsers.includes(user._id))
-  .map((user) => user.profileImageUrl);
+const selectedUsersData = allUsers
+  .filter((user) => selectedUsers.includes(user._id));
 
   useEffect(() => {
     getAllUsers();
   }, []);
 
   useEffect(() => {
-    if (selectedUsers.length === 0) {
+    if (isModalOpen) {
+      setTempSelectedUsers(selectedUsers);
+    } else if (selectedUsers.length === 0) {
       setTempSelectedUsers([]);
     }
-    return ()=>{};
-  }, [selectedUsers]);
+  }, [isModalOpen, selectedUsers]);
 
   return(
      <div className="space-y-4 mt-2">
-  {selectedUserAvatars.length === 0 && (
+  {selectedUsersData.length === 0 && (
     <button className="card-btn" onClick={() => setIsModalOpen(true)}>
       <LuUsers className="text-sm" /> Add Members
     </button>
   )}
-  {selectedUserAvatars.length > 0 && (
+  {selectedUsersData.length > 0 && (
   <div className="cursor-pointer" onClick={() => setIsModalOpen(true)}>
-    <AvatarGroup avatars={selectedUserAvatars} maxVisible={3} />
+    <AvatarGroup users={selectedUsersData} maxVisible={3} />
   </div>
 )}
 
@@ -69,11 +70,17 @@ const selectedUserAvatars = allUsers
     <div className="space-y-4 h-[60vh] overflow-y-auto">
   {allUsers.map((user) => (
     <div key={user._id} className="flex items-center gap-4 p-3 border-b border-gray-200">
-      <img
-        src={user.profileImageUrl || null}
-        alt={user.name}
-        className="w-10 h-10 rounded-full"
-      />
+      {user.profileImageUrl ? (
+        <img
+          src={user.profileImageUrl}
+          alt={user.name}
+          className="w-10 h-10 rounded-full object-cover"
+        />
+      ) : (
+        <div className={`w-10 h-10 rounded-full flex items-center justify-center text-xs font-semibold ${getAvatarBgColor(user.name)}`}>
+          {getInitials(user.name)}
+        </div>
+      )}
       <div className="flex-1">
     <p className="font-medium text-gray-800 dark:text-white">{user.name}</p>
     <p className="text-[13px] text-gray-500">{user.email}</p>

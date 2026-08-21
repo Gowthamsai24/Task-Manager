@@ -2,6 +2,7 @@ import React, { useState,useContext,useEffect } from 'react'
 import { UserContext } from '../../context/userContext'
 import { SIDE_MENU_DATA, SIDE_MENU_USER_DATA } from '../../utils/data';
 import {useNavigate} from "react-router-dom"
+import { getInitials, getAvatarBgColor } from '../../utils/helper';
 const SideMenu = ({activeMenu}) => {
     const {user,clearUser}=useContext(UserContext);
     const [sideMenuData,setSideMenuData]=useState([]);
@@ -31,11 +32,17 @@ const SideMenu = ({activeMenu}) => {
     <div className="relative">
       
 
-            <img
-            src={user?.profileImageUrl || null}
-            alt="Profile Image"
-            className="w-20 h-20 bg-state-400 rounded-full"
-            />
+            {user?.profileImageUrl ? (
+              <img
+                src={user.profileImageUrl}
+                alt="Profile Image"
+                className="w-20 h-20 rounded-full object-cover"
+              />
+            ) : (
+              <div className={`w-20 h-20 rounded-full flex items-center justify-center text-xl font-bold ${getAvatarBgColor(user?.name)}`}>
+                {getInitials(user?.name)}
+              </div>
+            )}
 
         </div>
         {user?.role==="admin" && (
